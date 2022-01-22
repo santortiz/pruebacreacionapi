@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API project</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <main>
+        <h1><a href="#"> <img src="./images/logo-udea.png" alt="logo universidad"></a></h1>
+        <fieldset>
+
+            <legend> Please enter the following information </legend>
+
+            <div id= "information">
+                <form id="data">
+                    <p>
+                    <label for="name">Name: </label>
+                    <input type="text" name="name" id="name" placeholder="Enter name here"> <br>
+
+                    <label for="lastName">Last Name: </label>
+                    <input type="text" name="lastName" id="lastName" placeholder="Enter last name here"> <br>
+                    
+                    </p>
+                    
+                </form>
+                
+                <button id="button" type="submit" class="btn btn-dark"> Submit </button>
+                
+            </div>
+
+        </fieldset>
+        <br>
+
+        <fieldset>
+            <legend>Registered users</legend>
+
+            <table>
+                <tr>
+                    <th> Name </th>
+                    <th> Last name </th>
+                </tr>
+            </table>
+
+        </fieldset>
+    </main>
+
+    <script src="main.js"></script>
+    
+</body>
+</html>
