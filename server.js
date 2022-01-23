@@ -1,5 +1,6 @@
 const express = require('express');
 const req = require('express/lib/request');
+const bodyParser= require('body-parser');
 
 const mysql = require('mysql2');
 
@@ -20,12 +21,19 @@ try{
 const api = express();
 
 api.use(express.static(__dirname + '/front'));
+api.use(bodyParser.json());
+
 
 api.listen(3000, ()=>{
     console.log('api running!');
 });
 
-api.post('/add', (req,res) => {
-    res.send('request received');
-    console.log('request received');
+
+api.post('/add', (req, res)=>{
+    
+    res.send('item added');
+    connection.query('INSERT INTO user (firstName, lastName) VALUES (?)',[[req.body.name, req.body.lastName]],  (error, results)=>{
+        if (error) return res.json({error: error});
+    });
+    
 });

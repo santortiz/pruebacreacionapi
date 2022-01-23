@@ -17,7 +17,6 @@ document.getElementById('lastName').addEventListener('keydown', (e) =>{
     }
 });
 
-
 function addItem(name, lastName){
     var req= new XMLHttpRequest();
 
