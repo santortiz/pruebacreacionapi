@@ -46,19 +46,3 @@ api.get('/registered', (req, res) => {
     });
 });
 
-api.get('/length', (req, res)=>{
-    connection.query('SHOW COLUMNS FROM user', (error, results)=>{
-        let columns_= [];
-
-        for (let item of results){
-            columns_.push(item.Field);
-        }
-
-        
-        let columns= JSON.stringify(columns_);
-
-        
-        res.json(columns);
-    });
-});
-
