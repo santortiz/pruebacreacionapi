@@ -3,6 +3,7 @@ const req = require('express/lib/request');
 const bodyParser= require('body-parser');
 
 const mysql = require('mysql2');
+const res = require('express/lib/response');
 
 const connection= mysql.createConnection({
     host: 'localhost',
@@ -31,10 +32,11 @@ api.listen(3000, ()=>{
 
 api.post('/add', (req, res)=>{
     
-    res.send('item added');
     connection.query('INSERT INTO user (firstName, lastName) VALUES (?)',[[req.body.name, req.body.lastName]],  (error, results)=>{
         if (error) return res.json({error: error});
     });
+
+    res.send('item added');
     
 });
 
@@ -46,3 +48,9 @@ api.get('/registered', (req, res) => {
     });
 });
 
+api.post('/del', (req, res)=>{
+
+    connection.query(`DELETE FROM user WHERE firstName='${req.body.firstName}' AND lastName='${req.body.lastName}'`, (error, results)=>{
+        if (error) return res.json({error: error});
+    });
+});
