@@ -57,51 +57,55 @@ api.post('/del', (req, res)=>{
 });
 */
 
-//QUERIES CON SEQUELIZE
+//QUERIES CON SEQUELIZE-CLI
 
 const Sequelize= require('sequelize');
-
-const sequelize= require('./database/database')
-const user_table = require('./database/models/user')
+const {sequelize, user} = require('./models');
 
 
-api.post('/add', (req, res)=>{
-    sequelize
-    .sync({force: false})
-    .then((result) => {
-
-        return user_table.create({firstName: req.body.name, lastName: req.body.lastName});
-    }).catch((err) =>{
+async function main(){
+    await sequelize.sync({force:false})
+    .catch(err => {
         console.log(err);
     });
+};
+
+main()
+
+
+api.post('/add', async (req, res)=>{
     
-    console.log("item added");
-    res.send('item added');
+    try{
+        const user_row = await user.create({firstName: `${req.body.name}`, lastName: `${req.body.lastName}`});
+        //return res.json(user_row)
+
+    } catch (err){
+        console.log(err);
+    };
 });
 
-api.get('/registered', (req, res) => {
+api.get('/registered', async (req,res)=>{
 
-    sequelize
-    .sync({force: false})
-    .then((result)=>{
-        return user_table.findAll();
-    }).then( (results) => {
-        return res.json(results);
-    }).catch((err)=> {
-        console.log(err)
-    });
+    try {
+        const consult = await user.findAll()
+
+        return res.json(consult);
+
+    } catch(err){
+        console.log(err);
+    }
+
 });
 
-api.post('/del', (req, res)=>{
+api.post('/del', async (req,res)=>{
 
-    sequelize
-    .sync({force: false})
-    .then((result) =>{
-        return user_table.destroy({where: {
+    try{
+        const del = await user.destroy({where: {
             firstName: `${req.body.firstName}`,
             lastName: `${req.body.lastName}`
         }});
-    }).catch(err=>{
-        console.log(err);
-    });
+
+    } catch (err){
+        console.log(err)
+    };
 });
