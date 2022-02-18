@@ -1,66 +1,24 @@
 const express = require('express');
 const req = require('express/lib/request');
 const bodyParser= require('body-parser');
+const fileUpload = require('express-fileupload')
+const Sequelize= require('sequelize');
+const {sequelize, User} = require('./models');
 
 const mysql = require('mysql2');
 const res = require('express/lib/response');
-/*
-const connection= mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password:'',
-    database:'prueba'
-});
 
-try{
-    connection.connect();
-} catch (e){
-    console.log('connection to mysql failed');
-    console.log(e);
-}
-*/
 
 const api = express();
 
 api.use(express.static(__dirname + '/front'));
 api.use(bodyParser.json());
+api.use(fileUpload());
 
 
-api.listen(3000, ()=>{
+api.listen(5000, ()=>{
     console.log('api running!');
 });
-
-/*
-api.post('/add', (req, res)=>{
-    
-    connection.query('INSERT INTO user (firstName, lastName) VALUES (?)',[[req.body.name, req.body.lastName]],  (error, results)=>{
-        if (error) return res.json({error: error});
-    });
-
-    res.send('item added');
-    
-});
-
-api.get('/registered', (req, res) => {
-    connection.query('SELECT * FROM user', (error, results)=>{
-
-        if (error) return res.json({error: error});
-        res.json(results); 
-    });
-});
-
-api.post('/del', (req, res)=>{
-
-    connection.query(`DELETE FROM user WHERE firstName='${req.body.firstName}' AND lastName='${req.body.lastName}'`, (error, results)=>{
-        if (error) return res.json({error: error});
-    });
-});
-*/
-
-//QUERIES CON SEQUELIZE-CLI
-
-const Sequelize= require('sequelize');
-const {sequelize, user} = require('./models');
 
 
 async function main(){
@@ -76,7 +34,7 @@ main()
 api.post('/add', async (req, res)=>{
     
     try{
-        const user_row = await user.create({firstName: `${req.body.name}`, lastName: `${req.body.lastName}`});
+        const user_row = await User.create({firstName: `${req.body.name}`, lastName: `${req.body.lastName}`});
         //return res.json(user_row)
 
     } catch (err){
@@ -87,7 +45,7 @@ api.post('/add', async (req, res)=>{
 api.get('/registered', async (req,res)=>{
 
     try {
-        const consult = await user.findAll()
+        const consult = await User.findAll()
 
         return res.json(consult);
 
@@ -100,7 +58,7 @@ api.get('/registered', async (req,res)=>{
 api.post('/del', async (req,res)=>{
 
     try{
-        const del = await user.destroy({where: {
+        const del = await User.destroy({where: {
             firstName: `${req.body.firstName}`,
             lastName: `${req.body.lastName}`
         }});
@@ -108,4 +66,34 @@ api.post('/del', async (req,res)=>{
     } catch (err){
         console.log(err)
     };
+});
+
+
+api.post('/upload', (req,res)=>{
+
+    try {
+        if(!req.files) {
+            res.send({
+                status: false,
+                message: 'No file uploaded'
+            });
+        } else {
+            //Use the name of the input field (i.e. "avatar") to retrieve the uploaded file
+            
+
+            for (let file of req.files.archivo){
+                
+                file.mv('./uploads/' + file.name);
+                
+            };
+
+            res.send({
+                status: true,
+                message: 'File is uploaded',
+            });
+
+        }
+    } catch (err) {
+        res.status(500).send(err);
+    }
 });
