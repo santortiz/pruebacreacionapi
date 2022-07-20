@@ -1,5 +1,3 @@
-
-
 document.getElementById('button').addEventListener('click', () =>{
     var name= document.getElementById('name').value;
     var lastName= document.getElementById('lastName').value;
@@ -32,6 +30,7 @@ function deleteItem(){
 }
 
 function addItem(name, lastName){
+
     var req= new XMLHttpRequest();
 
     req.open('POST', '/add');

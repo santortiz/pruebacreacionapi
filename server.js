@@ -8,7 +8,7 @@ const res = require('express/lib/response');
 const connection= mysql.createConnection({
     host: 'localhost',
     user: 'root',
-    password:'',
+    password:'user',
     database:'prueba'
 });
 
@@ -32,7 +32,7 @@ api.listen(3000, ()=>{
 
 api.post('/add', (req, res)=>{
     
-    connection.query('INSERT INTO user (firstName, lastName) VALUES (?)',[[req.body.name, req.body.lastName]],  (error, results)=>{
+    connection.query('INSERT INTO users (firstName, lastName) VALUES (?)',[[req.body.name, req.body.lastName]],  (error, results)=>{
         if (error) return res.json({error: error});
     });
 
@@ -41,7 +41,7 @@ api.post('/add', (req, res)=>{
 });
 
 api.get('/registered', (req, res) => {
-    connection.query('SELECT * FROM user', (error, results)=>{
+    connection.query('SELECT * FROM users', (error, results)=>{
 
         if (error) return res.json({error: error});
         res.json(results); 
